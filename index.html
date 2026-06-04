@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manas Asija — Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0c0e14;
+      --bg2: #12151e;
+      --bg3: #181c28;
+      --border: rgba(245,166,35,0.15);
+      --amber: #F5A623;
+      --amber-dim: rgba(245,166,35,0.6);
+      --white: #f0ede8;
+      --gray: #8a8f9e;
+      --gray2: #5a5f6e;
+      --serif: 'DM Serif Display', Georgia, serif;
+      --mono: 'IBM Plex Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 3rem;
+      background: rgba(12,14,20,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--amber);
+      letter-spacing: 0.1em;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--gray);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--amber); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid-line {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--border), transparent);
+    }
+    .hero-grid-line:nth-child(1) { left: 25%; }
+    .hero-grid-line:nth-child(2) { left: 50%; }
+    .hero-grid-line:nth-child(3) { left: 75%; }
+
+    .hero-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--amber);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(4rem, 10vw, 8.5rem);
+      line-height: 0.95;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.4s;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--amber);
+    }
+
+    .hero-tagline {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--gray);
+      height: 1.4em;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.6s;
+    }
+
+    .hero-tagline span {
+      color: var(--white);
+      border-right: 2px solid var(--amber);
+      padding-right: 4px;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink { 50% { border-color: transparent; } }
+
+    .hero-desc {
+      max-width: 560px;
+      font-size: 1.05rem;
+      color: var(--gray);
+      line-height: 1.8;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.8s;
+    }
+
+    .hero-desc strong { color: var(--white); font-weight: 500; }
+
+    .hero-cta {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1s;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.8rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--amber);
+      color: #0c0e14;
+      font-weight: 500;
+    }
+    .btn-primary:hover { background: #ffba40; transform: translateY(-2px); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--amber);
+      border: 1px solid var(--amber);
+    }
+    .btn-secondary:hover { background: rgba(245,166,35,0.08); transform: translateY(-2px); }
+
+    .hero-stats {
+      position: absolute;
+      right: 3rem;
+      bottom: 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1.2s;
+    }
+
+    .stat {
+      text-align: right;
+    }
+
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 2.5rem;
+      color: var(--amber);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--gray2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 7rem 3rem;
+      position: relative;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--amber);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-divider {
+      width: 60px;
+      height: 2px;
+      background: var(--amber);
+      margin-bottom: 4rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--bg2); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-photo-wrap {
+      position: relative;
+    }
+
+    .about-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-photo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(245,166,35,0.05) 0%, transparent 60%);
+    }
+
+    .photo-placeholder {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--gray2);
+      letter-spacing: 0.1em;
+      text-align: center;
+    }
+
+    .about-photo-tag {
+      position: absolute;
+      bottom: -1px;
+      left: -1px;
+      background: var(--amber);
+      color: #0c0e14;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      padding: 0.4rem 0.8rem;
+      letter-spacing: 0.1em;
+    }
+
+    .about-text p {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      line-height: 1.85;
+    }
+
+    .about-text strong { color: var(--white); font-weight: 500; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .skill-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--gray);
+      letter-spacing: 0.05em;
+    }
+
+    .skill-item::before {
+      content: '▸';
+      color: var(--amber);
+      font-size: 0.6rem;
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--bg); }
+
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.5rem;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--amber), transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 4rem;
+      padding-left: 2rem;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -2rem;
+      top: 0.4rem;
+      width: 9px;
+      height: 9px;
+      background: var(--amber);
+      border-radius: 50%;
+      transform: translateX(-4px);
+    }
+
+    .timeline-period {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--amber);
+      letter-spacing: 0.12em;
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-role {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      color: var(--white);
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline-company {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--gray);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+
+    .timeline-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .timeline-bullets li {
+      font-size: 0.92rem;
+      color: var(--gray);
+      padding-left: 1.2rem;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .timeline-bullets li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--amber-dim);
+    }
+
+    .timeline-bullets li strong { color: var(--white); font-weight: 500; }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--bg2); }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--amber);
+      padding: 2rem;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 80px; height: 80px;
+      background: radial-gradient(circle at top right, rgba(245,166,35,0.06), transparent 70%);
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--amber);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .project-tag {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--amber);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .project-title {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
+    }
+
+    .project-desc {
+      font-size: 0.88rem;
+      color: var(--gray);
+      line-height: 1.7;
+      margin-bottom: 1.25rem;
+    }
+
+    .project-result {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--amber);
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .project-result::before { content: '◆'; font-size: 0.5rem; }
+
+    .project-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 1rem;
+    }
+
+    .pill {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--gray2);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.5rem;
+      letter-spacing: 0.05em;
+      border-radius: 2px;
+    }
+
+    /* ── CERTIFICATIONS ── */
+    #certifications { background: var(--bg); }
+
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .cert-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 1.75rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .cert-card:hover {
+      border-color: var(--amber);
+      transform: translateY(-3px);
+    }
+
+    .cert-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .cert-name {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+
+    .cert-issuer {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--amber);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg2);
+      text-align: center;
+    }
+
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 3rem;
+    }
+
+    .contact-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .contact-link:hover { transform: translateY(-3px); }
+
+    .contact-link-icon {
+      width: 52px;
+      height: 52px;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .contact-link:hover .contact-link-icon {
+      border-color: var(--amber);
+      background: rgba(245,166,35,0.08);
+    }
+
+    .contact-link-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--gray2);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .contact-email {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--amber);
+      margin-top: 1.5rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--gray2);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      #hero { padding: 7rem 1.5rem 4rem; }
+      section { padding: 5rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-stats { display: none; }
+      .projects-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">MA_PORTFOLIO</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#certifications">Credentials</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-grid-line"></div>
+    <div class="hero-grid-line"></div>
+    <div class="hero-grid-line"></div>
+
+    <p class="hero-label">Process &amp; Quality Engineer — EV Systems</p>
+    <h1 class="hero-name">Manas<br /><em>Asija</em></h1>
+    <p class="hero-tagline"><span id="typed-text"></span></p>
+    <p class="hero-desc">
+      <strong>MS Mechanical Engineering, University of Michigan</strong> (4.0 GPA). Five years across TVS Motor Company, Bajaj Auto, and Tata Motors — driving quality engineering, EV NPI, and continuous improvement across automotive operations.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="#projects">View Projects</a>
+      <a class="btn btn-secondary" href="#contact">Get in Touch</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">94%</div>
+        <div class="stat-label">Warranty Cost Reduction</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">4.0</div>
+        <div class="stat-label">GPA at UMich</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">#1</div>
+        <div class="stat-label">of 109 Territories</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">001 — About</div>
+    <h2 class="section-title">Engineering Precision.<br />Field-Proven Results.</h2>
+    <div class="section-divider"></div>
+    <div class="about-grid">
+      <div class="about-photo-wrap fade-in">
+        <div class="about-photo">
+          <div class="photo-placeholder">[ PHOTO PLACEHOLDER ]<br />Add your photo here</div>
+          <div class="about-photo-tag">MANAS ASIJA</div>
+        </div>
+      </div>
+      <div class="about-text fade-in">
+        <p>
+          I am a <strong>Mechanical Engineering Master's student at the University of Michigan</strong>, graduating May 2026 with a 4.0 GPA. My focus spans automotive quality engineering, EV systems, battery technology, and smart manufacturing.
+        </p>
+        <p>
+          Before Michigan, I spent five years in the automotive industry across <strong>TVS Motor Company</strong>, <strong>Bajaj Auto</strong>, and <strong>Tata Motors</strong> — leading quality engineering, NPI launches, supplier quality management, and Lean Six Sigma improvement programs across India's largest two-wheeler OEMs.
+        </p>
+        <p>
+          I hold a <strong>DFSS Black Belt (Six Sigma equivalent)</strong> from UMich and a Certified Project Manager credential. Off the clock you'll find me on a tennis court, in the pool, or catching a soccer match.
+        </p>
+        <div class="skills-grid">
+          <div class="skill-item">SPC / DOE / PFMEA</div>
+          <div class="skill-item">APQP / PPAP</div>
+          <div class="skill-item">Lean Manufacturing</div>
+          <div class="skill-item">EV Powertrain Systems</div>
+          <div class="skill-item">Minitab / MATLAB</div>
+          <div class="skill-item">Power BI / SAP / SQL</div>
+          <div class="skill-item">Root Cause Analysis</div>
+          <div class="skill-item">Li-ion Battery Systems</div>
+          <div class="skill-item">GD&amp;T / MSA</div>
+          <div class="skill-item">Supplier Quality</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label">002 — Experience</div>
+    <h2 class="section-title">Where I've Built.</h2>
+    <div class="section-divider"></div>
+    <div class="timeline">
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot"></div>
+        <div class="timeline-period">AUG 2024 — MAY 2026</div>
+        <div class="timeline-role">M.S. Mechanical Engineering</div>
+        <div class="timeline-company">UNIVERSITY OF MICHIGAN, ANN ARBOR — GPA: 4.00/4.00</div>
+        <ul class="timeline-bullets">
+          <li>DFSS Black Belt project: reduced AIS 3+ injury probability from <strong>96.8% to 24%</strong> using Taguchi L27 DOE</li>
+          <li>Built CI Lens — AI-assisted analytics platform for RCA, SPC, and DOE workflows with Prof. Hammett</li>
+          <li>Battery materials research: LFP and solid-state electrolytes via EIS, SEM, and thermal stability analysis</li>
+          <li>Earned Certified Project Manager credential (ENTR 560)</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot"></div>
+        <div class="timeline-period">JUN 2023 — JUL 2024</div>
+        <div class="timeline-role">Service Manager — NPI &amp; Quality Engineering</div>
+        <div class="timeline-company">TVS MOTOR COMPANY — HISAR, INDIA · iQube EV Launch</div>
+        <ul class="timeline-bullets">
+          <li>Identified TPS sensor failure root cause on iQube EV; drove D-clamp design fix reducing warranty costs by <strong>94% (~$60K/month)</strong></li>
+          <li>Developed standardized work, SOPs, and SIBs; piloted at 4–5 locations and scaled to <strong>100+ dealerships</strong></li>
+          <li>Improved First-Time Resolution from <strong>75% to 97%</strong>; raised NPS from <strong>28% to 70%</strong></li>
+          <li>Achieved <strong>Rank 1 Regional</strong> in J.D. Power service satisfaction; zero major accidents in final 6 months</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot"></div>
+        <div class="timeline-period">JAN 2021 — APR 2023</div>
+        <div class="timeline-role">Service Manager — Process, Quality &amp; CI</div>
+        <div class="timeline-company">BAJAJ AUTO LTD. — RANCHI, INDIA</div>
+        <ul class="timeline-bullets">
+          <li>Led Lean Six Sigma across 8 service centers and 36 sub-locations; lifted OEE and quality KPIs by <strong>15–20%</strong></li>
+          <li>Achieved <strong>Rank 1 of 109</strong> territories nationally in NPS growth; reduced field-failure recurrence by <strong>20%</strong></li>
+          <li>Drove 4-vendor ECU supply base diversification during 2022 semiconductor crisis — mitigating geopolitical supply risk</li>
+          <li>Certified 6 of 8 facilities for TPM; strengthened 37 safety and reliability KPIs; aligned to IATF 16949 standards</li>
+        </ul>
+      </div>
+
+      <div class="timeline-item fade-in">
+        <div class="timeline-dot"></div>
+        <div class="timeline-period">JAN 2019 — JUN 2019</div>
+        <div class="timeline-role">Manufacturing Engineering Intern</div>
+        <div class="timeline-company">TATA MOTORS LTD. — PANTNAGAR, INDIA · Powertrain Assembly</div>
+        <ul class="timeline-bullets">
+          <li>Performed PFMEA and investigated <strong>275 non-conforming cases</strong> using SPC, Fishbone, and 5-Why</li>
+          <li>Conducted DFM reviews and supplier audits at in-plant vendor park; resolved top-tier head-cover quality issue</li>
+          <li>Stopwatch-based time studies and workstation balancing for powertrain line reconfiguration</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">003 — Projects</div>
+    <h2 class="section-title">What I've Built.</h2>
+    <div class="section-divider"></div>
+    <div class="projects-grid">
+
+      <div class="project-card fade-in">
+        <div class="project-tag">DFSS Black Belt · UMich · 2026</div>
+        <div class="project-title">Restraint System Optimization for Tall Occupants</div>
+        <div class="project-desc">
+          Standard restraint systems failed to protect 95th-percentile (tall) males in frontal crashes — baseline simulations showed a critical 96.8% probability of severe injury due to airbag bottoming out and head strike on the steering wheel rim. Applied the IDDOV framework with a Taguchi L27 orthogonal array DOE (27 runs vs. 243 full factorial), optimizing belt load limit, airbag flow rate, venting rate, and steering column force. Statistical analysis in Minitab identified head injury (HIC) as most sensitive to airbag venting, while chest injury was primarily driven by belt load limit.
+        </div>
+        <div class="project-result">AIS 3+ Injury Probability reduced from 96.8% → 24.0% (PASS)</div>
+        <div class="project-tags-row">
+          <span class="pill">IDDOV</span>
+          <span class="pill">Taguchi L27 DOE</span>
+          <span class="pill">Minitab</span>
+          <span class="pill">HIC / Nij / Chest</span>
+          <span class="pill">LS-DYNA Simulation</span>
+          <span class="pill">FMVSS</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-tag">Engineering Analytics Platform · UMich · 2025–26</div>
+        <div class="project-title">CI Lens — AI-Assisted Continuous Improvement Tool</div>
+        <div class="project-desc">
+          Co-developed with Prof. Pat Hammett (PhD) at UMich, CI Lens is an AI-integrated analytics platform designed to replace specialty software like Minitab for Six Sigma and continuous improvement training. The platform provides an operating system supporting ~100 tools across graphical analysis, SPC, hypothesis testing, regression, DOE, MSA, FMEA, VSM, and project management. Built to be AI-system-agnostic (ChatGPT, Copilot compatible) and deployed for use in UMich credit and professional education courses serving 400–500 students annually.
+        </div>
+        <div class="project-result">Deployed with Prof. Hammett; validated against Minitab-equivalent industry tools</div>
+        <div class="project-tags-row">
+          <span class="pill">AI Integration</span>
+          <span class="pill">SPC / DOE</span>
+          <span class="pill">RCA Automation</span>
+          <span class="pill">FMEA / VSM</span>
+          <span class="pill">Minitab Alternative</span>
+          <span class="pill">DMAIC / DFSS</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-tag">Crashworthiness · UMich · 2025</div>
+        <div class="project-title">Structural Crash Modeling &amp; Vehicle Safety Analysis</div>
+        <div class="project-desc">
+          Built and validated finite element vehicle crash models using HyperMesh and LS-DYNA, including ATD (Hybrid-III 50th and 95th percentile) modeling for occupant kinematics analysis in frontal and side-impact scenarios. Analyzed NHTSA crash datasets in MATLAB to compute crush efficiency and validate energy absorption models, achieving less than 5% error margin against experimental data. Applied FMVSS, IIHS, and NCAP safety regulation criteria throughout.
+        </div>
+        <div class="project-result">&lt;5% error margin vs. experimental crash data</div>
+        <div class="project-tags-row">
+          <span class="pill">HyperMesh</span>
+          <span class="pill">LS-DYNA</span>
+          <span class="pill">ATD Modeling</span>
+          <span class="pill">MATLAB</span>
+          <span class="pill">FMVSS / IIHS / NCAP</span>
+          <span class="pill">FEA</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-tag">Battery Materials Research · UMich · 2025</div>
+        <div class="project-title">LFP &amp; Solid-State Electrolyte Investigation</div>
+        <div class="project-desc">
+          Conducted hands-on research in Prof. Tang's lab investigating LFP (lithium iron phosphate) and solid-state electrolyte systems. Prepared solid-state electrolyte samples, performed Electrochemical Impedance Spectroscopy (EIS), Scanning Electron Microscopy (SEM), and thermal stability analysis to characterize ionic conductivity and electrochemical performance. Achieved approximately 12% gain in ionic conductivity through optimized electrolyte composition.
+        </div>
+        <div class="project-result">~12% improvement in ionic conductivity</div>
+        <div class="project-tags-row">
+          <span class="pill">LFP Chemistry</span>
+          <span class="pill">EIS</span>
+          <span class="pill">SEM</span>
+          <span class="pill">Solid-State Electrolytes</span>
+          <span class="pill">Thermal Analysis</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-tag">GTM Strategy · UMich ENTR 560 · 2025</div>
+        <div class="project-title">Saykal Electronics — Automotive Radar Market Entry</div>
+        <div class="project-desc">
+          Led U.S. and Canada go-to-market strategy for Saykal Electronics' automotive radar sensor product line. Delivered OEM and Tier-1 supplier segmentation, competitive pricing strategy, regulatory alignment (FCC, NHTSA, ISED Canada), and a phased market-entry roadmap. Presented findings directly to Saykal leadership. Earned Certified Project Manager credential through this program.
+        </div>
+        <div class="project-result">Presented roadmap to Saykal leadership; earned CPM credential</div>
+        <div class="project-tags-row">
+          <span class="pill">GTM Strategy</span>
+          <span class="pill">OEM Segmentation</span>
+          <span class="pill">FCC / NHTSA</span>
+          <span class="pill">Pricing Strategy</span>
+          <span class="pill">Project Management</span>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-tag">Professional · TVS Motor Company · 2023–24</div>
+        <div class="project-title">iQube EV Launch — NPI Quality &amp; Warranty Reduction</div>
+        <div class="project-desc">
+          Led incoming quality and NPI support during India's first mass-market electric scooter launch. Identified a systemic TPS sensor failure caused by E20 fuel incompatibility through structured 5-Why and Ishikawa analysis. Proposed and drove implementation of a D-clamp design fix with R&D — making the child part individually serviceable. Authored SOPs piloted at 4–5 dealerships, then scaled to 100+ locations network-wide. Results cascaded through lessons learned to R&D for DFMEA updates.
+        </div>
+        <div class="project-result">94% warranty cost reduction · FTR 75% → 97% · NPS 28% → 70%</div>
+        <div class="project-tags-row">
+          <span class="pill">NPI</span>
+          <span class="pill">RCA / 8D</span>
+          <span class="pill">SOP Development</span>
+          <span class="pill">DFMEA</span>
+          <span class="pill">EV Systems</span>
+          <span class="pill">Warranty Analysis</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications">
+    <div class="section-label">004 — Credentials</div>
+    <h2 class="section-title">Certified &amp; Recognised.</h2>
+    <div class="section-divider"></div>
+    <div class="cert-grid">
+      <div class="cert-card fade-in">
+        <div class="cert-icon">⬡</div>
+        <div class="cert-name">DFSS Black Belt</div>
+        <div class="cert-issuer">University of Michigan · Six Sigma Black Belt Equivalent</div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">◈</div>
+        <div class="cert-name">Certified Project Manager</div>
+        <div class="cert-issuer">University of Michigan · ENTR 560</div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">▣</div>
+        <div class="cert-name">Rank #1 of 109 Territories</div>
+        <div class="cert-issuer">Bajaj Auto · National NPS Growth</div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">◉</div>
+        <div class="cert-name">Rank #1 Regional</div>
+        <div class="cert-issuer">TVS Motor · J.D. Power Service Satisfaction</div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">◫</div>
+        <div class="cert-name">M.S. Mechanical Engineering</div>
+        <div class="cert-issuer">University of Michigan · GPA 4.00/4.00 · 2026</div>
+      </div>
+      <div class="cert-card fade-in">
+        <div class="cert-icon">◧</div>
+        <div class="cert-name">B.E. Mechanical Engineering</div>
+        <div class="cert-issuer">Thapar Institute · Top 3% · ABET Accredited</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">005 — Contact</div>
+    <h2 class="section-title">Let's Connect.</h2>
+    <div class="section-divider" style="margin: 0 auto 4rem;"></div>
+    <div class="contact-inner">
+      <p style="color: var(--gray); font-size: 1rem; line-height: 1.8; margin-bottom: 1rem;">
+        Open to full-time opportunities in process engineering, quality engineering, and EV systems. Based in Ann Arbor, MI — open to relocation.
+      </p>
+      <div class="contact-email">masija@umich.edu</div>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:masija@umich.edu">
+          <div class="contact-link-icon">✉</div>
+          <span class="contact-link-label">Email</span>
+        </a>
+        <a class="contact-link" href="https://www.linkedin.com/in/manas-asija/" target="_blank">
+          <div class="contact-link-icon">in</div>
+          <span class="contact-link-label">LinkedIn</span>
+        </a>
+        <a class="contact-link" href="tel:+17343680069">
+          <div class="contact-link-icon">✆</div>
+          <span class="contact-link-label">Phone</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 MANAS ASIJA — ALL RIGHTS RESERVED</p>
+    <p>ANN ARBOR, MI · OPEN TO RELOCATION</p>
+  </footer>
+
+  <script>
+    // ── TYPEWRITER ──
+    const phrases = [
+      'Process Engineer',
+      'Quality Engineer',
+      'Six Sigma Black Belt',
+      'EV Systems Specialist',
+      'MS Mechanical Engineering'
+    ];
+    let pi = 0, ci = 0, deleting = false;
+    const el = document.getElementById('typed-text');
+
+    function type() {
+      const current = phrases[pi];
+      if (!deleting) {
+        el.textContent = current.slice(0, ++ci);
+        if (ci === current.length) { deleting = true; setTimeout(type, 1800); return; }
+      } else {
+        el.textContent = current.slice(0, --ci);
+        if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
+      }
+      setTimeout(type, deleting ? 45 : 80);
+    }
+    type();
+
+    // ── SCROLL FADE IN ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
